@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Cindy Artes Agenda - CAA.10.05#2</title>
+    <title>Cindy Artes Agenda - CAA.23.05#1.3</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Bibliotecas para Gerar PDF/Imagem do Recibo -->
@@ -19,6 +19,11 @@
             --bg: #FFF9FA;
             --text-main: #3D0A1B;
         }
+
+        /* Sistema de Zoom Responsivo (Fase 1.1) */
+        html { transition: font-size 0.3s ease; font-size: 16px; }
+        html.zoom-large { font-size: 18.5px; }
+        html.zoom-xlarge { font-size: 21px; }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -152,12 +157,14 @@
         }
 
         .btn-concluir {
-            height: 42px;
-            padding: 0 16px;
+            height: auto;
+            min-height: 42px;
+            padding: 8px 16px;
             border-radius: 12px;
-            font-size: 11px;
+            font-size: 0.6875rem;
             font-weight: 800;
             text-transform: uppercase;
+            text-align: center;
         }
 
         /* Custom Toast */
@@ -213,7 +220,7 @@
             left: 15px;
             background: var(--primary);
             color: white;
-            font-size: 10px;
+            font-size: 0.625rem;
             font-weight: 900;
             padding: 2px 8px;
             border-radius: 10px;
@@ -234,7 +241,7 @@
             position: relative;
         }
         .chart-label {
-            font-size: 8px;
+            font-size: 0.5rem;
             font-weight: 800;
             text-transform: uppercase;
             color: #D81B60;
@@ -260,20 +267,24 @@
             <div class="flex justify-between items-center mb-6">
                 <div>
                     <h1 class="text-2xl font-bold brand-font">Cindy Artes Agenda</h1>
-                    <span class="text-[10px] font-bold opacity-30 tracking-widest uppercase">Versão CAA.10.05#2</span>
+                    <span class="text-[0.625rem] font-bold opacity-30 tracking-widest uppercase">Versão CAA.23.05#1.3</span>
                 </div>
                 <div class="bg-white/90 backdrop-blur px-4 py-2 rounded-2xl flex items-center gap-2 shadow-sm">
                     <span id="orderCount" class="text-lg font-black text-pink-600 leading-none">0</span>
-                    <span class="text-[10px] font-bold uppercase text-pink-400">Ativos</span>
+                    <span class="text-[0.625rem] font-bold uppercase text-pink-400">Ativos</span>
                 </div>
             </div>
 
-            <div class="flex gap-3">
+            <div class="flex gap-2">
                 <div class="relative flex-1">
                     <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-pink-300"></i>
                     <input type="text" id="searchInput" placeholder="Buscar cliente ou produto..." 
                         class="w-full bg-white/80 border-none rounded-2xl py-4 pl-12 pr-4 shadow-inner outline-none text-sm transition-all focus:bg-white">
                 </div>
+                <!-- BOTÃO DE ZOOM -->
+                <button onclick="openFontModal()" class="w-14 h-14 bg-white/80 rounded-2xl flex items-center justify-center text-pink-500 shadow-inner active:scale-90 transition-transform">
+                    <i data-lucide="a-large-small" class="w-6 h-6"></i>
+                </button>
                 <button onclick="openExportModal()" class="w-14 h-14 bg-white/80 rounded-2xl flex items-center justify-center text-pink-500 shadow-inner active:scale-90 transition-transform">
                     <i data-lucide="clipboard-list" class="w-6 h-6"></i>
                 </button>
@@ -281,13 +292,13 @@
         </header>
 
         <!-- Filtros -->
-        <div class="px-6 flex gap-3 overflow-x-auto no-scrollbar my-6">
-            <button onclick="changeView('list', 'Todos')" class="nav-chip px-6 py-3 rounded-2xl text-[11px] font-extrabold whitespace-nowrap bg-pink-500 text-white shadow-md">Todos</button>
-            <button onclick="changeView('list', 'Pendente')" class="nav-chip px-6 py-3 rounded-2xl text-[11px] font-extrabold whitespace-nowrap bg-white border border-pink-50 text-pink-300">Pendentes</button>
-            <button onclick="changeView('list', 'Urgente')" class="nav-chip px-6 py-3 rounded-2xl text-[11px] font-extrabold whitespace-nowrap bg-white border border-pink-50 text-orange-400">Urgentes</button>
-            <button onclick="changeView('list', 'Concluído')" class="nav-chip px-6 py-3 rounded-2xl text-[11px] font-extrabold whitespace-nowrap bg-white border border-pink-50 text-blue-500">Concluídos</button>
-            <button onclick="changeView('stats', '')" class="nav-chip px-6 py-3 rounded-2xl text-[11px] font-extrabold whitespace-nowrap bg-white border border-pink-50 text-blue-400 flex items-center gap-2">
-                <i data-lucide="bar-chart-3" class="w-4 h-4"></i> Estatísticas
+        <div class="px-6 flex gap-3 overflow-x-auto no-scrollbar my-6 items-center">
+            <button onclick="changeView('list', 'Todos')" class="nav-chip px-6 py-3 rounded-2xl text-[0.6875rem] font-extrabold whitespace-nowrap bg-pink-500 text-white shadow-md">Todos</button>
+            <button onclick="changeView('list', 'Pendente')" class="nav-chip px-6 py-3 rounded-2xl text-[0.6875rem] font-extrabold whitespace-nowrap bg-white border border-pink-50 text-pink-300">Pendentes</button>
+            <button onclick="changeView('list', 'Urgente')" class="nav-chip px-6 py-3 rounded-2xl text-[0.6875rem] font-extrabold whitespace-nowrap bg-white border border-pink-50 text-orange-400">Urgentes</button>
+            <button onclick="changeView('list', 'Concluído')" class="nav-chip px-6 py-3 rounded-2xl text-[0.6875rem] font-extrabold whitespace-nowrap bg-white border border-pink-50 text-blue-500">Concluídos</button>
+            <button onclick="changeView('stats', '')" class="nav-chip px-6 py-3 rounded-2xl text-[0.6875rem] font-extrabold whitespace-nowrap bg-white border border-pink-50 text-blue-400 flex items-center gap-2">
+                <i data-lucide="bar-chart-3" class="w-4 h-4 flex-shrink-0"></i> Estatísticas
             </button>
         </div>
 
@@ -302,12 +313,61 @@
         </button>
     </div>
 
+    <!-- MODAL FONTES (Fase 1.1) -->
+    <div id="fontModal" class="fixed inset-0 bg-black/80 z-[100] hidden flex items-center justify-center p-6 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-xs rounded-[40px] p-8 shadow-2xl text-center">
+            <div class="w-16 h-16 bg-pink-50 text-pink-500 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                <i data-lucide="type" class="w-8 h-8"></i>
+            </div>
+            <h3 class="font-extrabold text-xl mb-6 text-pink-900">Tamanho da Letra</h3>
+            <div class="space-y-3">
+                <button onclick="setFontSize('normal')" class="w-full py-4 rounded-2xl border border-pink-100 bg-white font-bold text-sm text-gray-700 active:bg-pink-50">Padrão</button>
+                <button onclick="setFontSize('large')" class="w-full py-4 rounded-2xl border border-pink-100 bg-white font-bold text-base text-gray-700 active:bg-pink-50">Grande</button>
+                <button onclick="setFontSize('xlarge')" class="w-full py-4 rounded-2xl border border-pink-100 bg-white font-black text-lg text-gray-700 active:bg-pink-50 shadow-sm shadow-pink-100">Extra Grande</button>
+            </div>
+            <button onclick="closeFontModal()" class="mt-6 w-full bg-gray-50 text-gray-400 py-4 rounded-2xl font-black text-[0.6875rem] uppercase">Voltar</button>
+        </div>
+    </div>
+
+    <!-- FASE 1.3: MODAL DE CONCLUSÃO DE PEDIDO -->
+    <div id="finishModal" class="fixed inset-0 bg-black/70 z-[80] hidden flex items-center justify-center p-6 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-sm rounded-[40px] p-8 text-center shadow-2xl relative">
+            <button onclick="closeFinishModal()" class="absolute top-6 right-6 w-10 h-10 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-400 active:scale-90 transition-transform"><i data-lucide="x" class="w-5 h-5"></i></button>
+            
+            <div class="w-16 h-16 bg-blue-50 text-blue-500 rounded-3xl flex items-center justify-center mx-auto mb-6 mt-2">
+                <i data-lucide="check-circle-2" class="w-8 h-8"></i>
+            </div>
+            <h3 class="font-black text-2xl text-pink-900 mb-2 brand-font">Finalizar Pedido</h3>
+            <p class="text-[0.6875rem] text-gray-500 font-bold mb-8 uppercase tracking-wide">Quando esta encomenda foi finalizada?</p>
+            
+            <input type="hidden" id="finishOrderId">
+            
+            <div class="space-y-5">
+                <button onclick="confirmFinish('now')" class="w-full bg-blue-500 text-white py-4 rounded-2xl font-black text-sm uppercase shadow-md active:scale-95 transition-transform flex justify-center items-center gap-2">
+                    <i data-lucide="zap" class="w-4 h-4"></i> Hoje / Agora
+                </button>
+                
+                <div class="relative flex items-center py-2">
+                    <div class="flex-grow border-t border-gray-100"></div>
+                    <span class="flex-shrink-0 mx-4 text-gray-300 text-[0.625rem] font-bold uppercase tracking-widest">Ou Data Passada</span>
+                    <div class="flex-grow border-t border-gray-100"></div>
+                </div>
+                
+                <div class="flex gap-2">
+                    <input type="date" id="finishDateInput" class="flex-1 bg-gray-50 border border-gray-100 rounded-2xl p-4 outline-none text-sm font-bold text-gray-700">
+                    <button onclick="confirmFinish('custom')" class="bg-pink-500 text-white px-6 rounded-2xl font-black text-sm active:scale-95 transition-transform shadow-md"><i data-lucide="check" class="w-5 h-5"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Formulário Multi-Produtos -->
-    <div id="orderModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md rounded-[40px] p-8 shadow-2xl max-h-[92vh] overflow-y-auto no-scrollbar">
-            <div class="flex justify-between items-center mb-8">
-                <h3 id="modalTitle" class="text-2xl font-black brand-font text-pink-900">Novo Registro</h3>
-                <button onclick="closeOrderModal()" class="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center"><i data-lucide="x" class="w-6 h-6"></i></button>
+    <div id="orderModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-[40px] px-6 sm:px-8 pb-8 pt-4 shadow-2xl max-h-[92vh] overflow-y-auto no-scrollbar overscroll-contain relative">
+            
+            <div class="sticky top-0 bg-white z-20 pb-4 pt-2 border-b border-pink-50/50 mb-6 flex justify-between items-center">
+                <h3 id="modalTitle" class="text-xl sm:text-2xl font-black brand-font text-pink-900 leading-tight">Novo Registro</h3>
+                <button type="button" onclick="closeOrderModal()" class="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center flex-shrink-0 active:scale-90 transition-transform"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
             
             <form id="orderForm" class="space-y-6">
@@ -317,27 +377,34 @@
                 <div class="space-y-4">
                     <div class="grid grid-cols-2 gap-4">
                         <div class="col-span-1">
-                            <label class="text-[11px] font-extrabold text-pink-400 uppercase ml-2 mb-2 block">Cliente:</label>
+                            <label class="text-[0.6875rem] font-extrabold text-pink-400 uppercase ml-2 mb-2 block">Cliente:</label>
                             <input type="text" id="clientName" placeholder="Nome" required class="w-full bg-gray-50 border-none rounded-2xl p-4 outline-none text-base">
                         </div>
                         <div class="col-span-1">
-                            <label class="text-[11px] font-extrabold text-pink-400 uppercase ml-2 mb-2 block">WhatsApp:</label>
+                            <label class="text-[0.6875rem] font-extrabold text-pink-400 uppercase ml-2 mb-2 block">WhatsApp:</label>
                             <input type="tel" id="clientWhatsApp" placeholder="(00) 00000" class="w-full bg-gray-50 border-none rounded-2xl p-4 outline-none text-base">
                         </div>
                     </div>
 
-                    <div>
-                        <label class="text-[11px] font-extrabold text-pink-400 uppercase ml-2 mb-2 block">Prazo Entrega:</label>
-                        <input type="date" id="deliveryDate" required class="w-full bg-gray-50 border-none rounded-2xl p-4 outline-none text-sm font-bold">
+                    <!-- FASE 1.2: Nova Divisão de Datas -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="col-span-1">
+                            <label class="text-[0.6875rem] font-extrabold text-pink-400 uppercase ml-2 mb-2 block">Data do Pedido:</label>
+                            <input type="date" id="orderDate" required class="w-full bg-gray-50 border-none rounded-2xl p-4 outline-none text-sm font-bold text-pink-900">
+                        </div>
+                        <div class="col-span-1">
+                            <label class="text-[0.6875rem] font-extrabold text-pink-400 uppercase ml-2 mb-2 block">Prazo Entrega:</label>
+                            <input type="date" id="deliveryDate" required class="w-full bg-gray-50 border-none rounded-2xl p-4 outline-none text-sm font-bold text-pink-900">
+                        </div>
                     </div>
                 </div>
 
                 <!-- Carrinho de Itens -->
                 <div class="space-y-3">
-                    <div class="flex justify-between items-center px-2">
-                        <label class="text-[11px] font-black text-pink-900 uppercase tracking-wider">Produtos do Pedido</label>
-                        <button type="button" onclick="addItemToForm()" class="flex items-center gap-1 text-[10px] font-black text-white bg-pink-500 px-3 py-1.5 rounded-full shadow-sm">
-                            <i data-lucide="plus" class="w-3 h-3"></i> ADICIONAR PRODUTO
+                    <div class="flex justify-between items-center px-2 flex-wrap gap-y-3">
+                        <label class="text-[0.6875rem] font-black text-pink-900 uppercase tracking-wider">Produtos do Pedido</label>
+                        <button type="button" onclick="addItemToForm()" class="flex items-center justify-center gap-1 text-[0.625rem] font-black text-white bg-pink-500 px-4 py-2 rounded-2xl shadow-sm h-auto min-h-[36px] flex-wrap text-center active:scale-95 transition-transform">
+                            <i data-lucide="plus" class="w-3 h-3 flex-shrink-0"></i> <span>ADICIONAR PRODUTO</span>
                         </button>
                     </div>
                     
@@ -346,9 +413,9 @@
                     </div>
 
                     <div class="bg-gray-900 text-white p-5 rounded-[28px] flex justify-between items-center shadow-lg">
-                        <span class="text-[10px] font-black uppercase opacity-60">Total do Pedido</span>
+                        <span class="text-[0.625rem] font-black uppercase opacity-60">Total do Pedido</span>
                         <div class="text-right">
-                            <span class="text-[10px] font-bold block opacity-40">R$</span>
+                            <span class="text-[0.625rem] font-bold block opacity-40">R$</span>
                             <span id="displayTotal" class="text-2xl font-black">0,00</span>
                             <input type="hidden" id="orderValue" value="0">
                         </div>
@@ -356,7 +423,7 @@
                 </div>
 
                 <div>
-                    <label class="text-[11px] font-extrabold text-pink-400 uppercase ml-2 mb-2 block">Observações Gerais:</label>
+                    <label class="text-[0.6875rem] font-extrabold text-pink-400 uppercase ml-2 mb-2 block">Observações Gerais:</label>
                     <textarea id="observations" rows="2" placeholder="Informações adicionais do pedido completo..." class="w-full bg-gray-50 border-none rounded-2xl p-4 outline-none text-sm no-scrollbar resize-none"></textarea>
                 </div>
 
@@ -364,55 +431,55 @@
                 <div class="address-section overflow-hidden">
                     <button type="button" onclick="toggleAddressForm()" class="w-full p-4 flex justify-between items-center text-slate-600">
                         <div class="flex items-center gap-2">
-                            <i data-lucide="truck" class="w-5 h-5 text-pink-500"></i>
-                            <span class="text-[11px] font-extrabold uppercase">Logística de Entrega</span>
+                            <i data-lucide="truck" class="w-5 h-5 text-pink-500 flex-shrink-0"></i>
+                            <span class="text-[0.6875rem] font-extrabold uppercase">Logística de Entrega</span>
                         </div>
-                        <i data-lucide="chevron-down" id="addressChevron" class="w-5 h-5 transition-transform"></i>
+                        <i data-lucide="chevron-down" id="addressChevron" class="w-5 h-5 transition-transform flex-shrink-0"></i>
                     </button>
                     <div id="addressFields" class="hidden p-4 pt-0 space-y-4">
                         <div class="grid grid-cols-3 gap-3">
                             <div class="col-span-2 relative">
-                                <label class="text-[10px] font-bold text-gray-400 uppercase ml-1 mb-1 block">CEP:</label>
+                                <label class="text-[0.625rem] font-bold text-gray-400 uppercase ml-1 mb-1 block">CEP:</label>
                                 <input type="text" id="addrCep" maxlength="9" placeholder="00000-000" oninput="handleCepInput(this)" class="w-full bg-white border border-gray-100 rounded-xl p-3 text-sm">
                                 <div id="cepLoader" class="absolute right-3 top-[34px] hidden"><i data-lucide="loader-2" class="w-4 h-4 text-pink-500 cep-loading"></i></div>
                             </div>
                         </div>
                         <div class="grid grid-cols-3 gap-3">
                             <div class="col-span-2">
-                                <label class="text-[10px] font-bold text-gray-400 uppercase ml-1 mb-1 block">Rua:</label>
+                                <label class="text-[0.625rem] font-bold text-gray-400 uppercase ml-1 mb-1 block">Rua:</label>
                                 <input type="text" id="addrStreet" placeholder="Rua" class="w-full bg-white border border-gray-100 rounded-xl p-3 text-sm">
                             </div>
                             <div>
-                                <label class="text-[10px] font-bold text-gray-400 uppercase ml-1 mb-1 block">Nº:</label>
+                                <label class="text-[0.625rem] font-bold text-gray-400 uppercase ml-1 mb-1 block">Nº:</label>
                                 <input type="text" id="addrNumber" placeholder="123" class="w-full bg-white border border-gray-100 rounded-xl p-3 text-sm">
                             </div>
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="text-[10px] font-bold text-gray-400 uppercase ml-1 mb-1 block">Bairro:</label>
+                                <label class="text-[0.625rem] font-bold text-gray-400 uppercase ml-1 mb-1 block">Bairro:</label>
                                 <input type="text" id="addrNeighborhood" placeholder="Bairro" class="w-full bg-white border border-gray-100 rounded-xl p-3 text-sm">
                             </div>
                             <div>
-                                <label class="text-[10px] font-bold text-gray-400 uppercase ml-1 mb-1 block">Cidade/UF:</label>
+                                <label class="text-[0.625rem] font-bold text-gray-400 uppercase ml-1 mb-1 block">Cidade/UF:</label>
                                 <input type="text" id="addrCity" placeholder="Cidade - UF" class="w-full bg-white border border-gray-100 rounded-xl p-3 text-sm">
                             </div>
                         </div>
                         <div>
-                            <label class="text-[10px] font-bold text-gray-400 uppercase ml-1 mb-1 block">Ponto de Referência:</label>
+                            <label class="text-[0.625rem] font-bold text-gray-400 uppercase ml-1 mb-1 block">Ponto de Referência:</label>
                             <input type="text" id="addrReference" placeholder="Opcional" class="w-full bg-white border border-gray-100 rounded-xl p-3 text-sm">
                         </div>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-4 bg-pink-50 p-5 rounded-[28px] border border-pink-100/50">
-                    <div id="iconPreview" class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-pink-500 shadow-sm">
+                    <div id="iconPreview" class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-pink-500 shadow-sm flex-shrink-0">
                         <i data-lucide="smile" id="selectedIcon" class="w-8 h-8"></i>
                     </div>
-                    <button type="button" onclick="openIconPicker()" class="text-[11px] font-extrabold uppercase text-pink-500 bg-white px-4 py-3 rounded-xl border border-pink-50">Ícone Global</button>
+                    <button type="button" onclick="openIconPicker()" class="text-[0.6875rem] font-extrabold uppercase text-pink-500 bg-white px-4 py-3 rounded-xl border border-pink-50 h-auto min-h-[44px]">Ícone Global</button>
                     <input type="hidden" id="iconName" value="smile">
                 </div>
 
-                <button type="submit" id="submitBtn" class="w-full bg-[#F06292] text-white py-5 rounded-3xl font-black text-lg shadow-lg shadow-pink-100 active:scale-95 transition-transform">Salvar Agenda</button>
+                <button type="submit" id="submitBtn" class="w-full bg-[#F06292] text-white py-5 rounded-3xl font-black text-lg shadow-lg shadow-pink-100 active:scale-95 transition-transform h-auto">Salvar Agenda</button>
             </form>
         </div>
     </div>
@@ -430,18 +497,18 @@
                 <div class="text-center mb-8">
                     <h2 class="brand-font text-4xl mb-1 text-pink-900">Cindy Artes</h2>
                     <div class="w-12 h-1 bg-pink-200 mx-auto mb-2"></div>
-                    <p class="text-[9px] uppercase font-black tracking-[5px] text-pink-300">Recibo de Pedido</p>
+                    <p class="text-[0.5625rem] uppercase font-black tracking-[5px] text-pink-300">Recibo de Pedido</p>
                 </div>
                 
                 <div class="space-y-4">
                     <div class="flex justify-between items-end border-b border-pink-50 pb-2">
-                        <span class="text-[9px] font-black text-pink-300 uppercase">Cliente:</span>
+                        <span class="text-[0.5625rem] font-black text-pink-300 uppercase">Cliente:</span>
                         <span id="recClient" class="font-bold text-base text-pink-900"></span>
                     </div>
 
                     <!-- Tabela de Itens no Recibo -->
                     <div>
-                        <div class="grid grid-cols-12 gap-2 text-[8px] font-black text-pink-300 uppercase mb-2">
+                        <div class="grid grid-cols-12 gap-2 text-[0.5rem] font-black text-pink-300 uppercase mb-2">
                             <div class="col-span-6">Descrição</div>
                             <div class="col-span-3 text-center">Cor</div>
                             <div class="col-span-3 text-right">Valor</div>
@@ -452,19 +519,19 @@
                     </div>
 
                     <div class="flex justify-between items-end">
-                        <span class="text-[9px] font-black text-pink-300 uppercase">Previsão:</span>
+                        <span class="text-[0.5625rem] font-black text-pink-300 uppercase">Previsão:</span>
                         <span id="recDate" class="font-black text-sm text-pink-600"></span>
                     </div>
                     
                     <div class="pt-4 flex justify-between items-center bg-pink-50/30 p-4 rounded-2xl">
-                        <span class="text-[10px] font-black text-pink-400 uppercase">Total Geral:</span>
+                        <span class="text-[0.625rem] font-black text-pink-400 uppercase">Total Geral:</span>
                         <span id="recTotal" class="font-black text-2xl text-pink-900"></span>
                     </div>
                 </div>
                 
                 <div class="mt-10 text-center">
-                    <p class="italic text-[10px] text-pink-300 mb-6">Feito com carinho para você!</p>
-                    <div class="border-t border-pink-50 pt-4 text-[7px] text-gray-300 uppercase tracking-widest">
+                    <p class="italic text-[0.625rem] text-pink-300 mb-6">Feito com carinho para você!</p>
+                    <div class="border-t border-pink-50 pt-4 text-[0.4375rem] text-gray-300 uppercase tracking-widest">
                         Documento Gerado em <span id="recNow"></span>
                     </div>
                 </div>
@@ -472,8 +539,8 @@
         </div>
         
         <div class="flex flex-wrap justify-center gap-4 w-full max-w-sm">
-            <button onclick="closeReceipt()" class="bg-white/10 text-white px-8 py-4 rounded-2xl font-bold text-[11px] uppercase border border-white/20">Sair</button>
-            <button onclick="downloadReceipt()" class="bg-pink-500 text-white px-8 py-4 rounded-2xl font-black text-[11px] uppercase shadow-lg">Salvar JPG</button>
+            <button onclick="closeReceipt()" class="bg-white/10 text-white px-8 py-4 rounded-2xl font-bold text-[0.6875rem] uppercase border border-white/20">Sair</button>
+            <button onclick="downloadReceipt()" class="bg-pink-500 text-white px-8 py-4 rounded-2xl font-black text-[0.6875rem] uppercase shadow-lg">Salvar JPG</button>
         </div>
     </div>
 
@@ -484,7 +551,7 @@
                 <h3 class="text-xl font-black brand-font">Agenda Offline</h3>
                 <button onclick="closeExportModal()"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
-            <textarea id="exportText" class="flex-1 bg-gray-50 border-none rounded-3xl p-5 text-[11px] font-mono text-gray-600 outline-none resize-none mb-6 no-scrollbar" readonly></textarea>
+            <textarea id="exportText" class="flex-1 bg-gray-50 border-none rounded-3xl p-5 text-[0.6875rem] font-mono text-gray-600 outline-none resize-none mb-6 no-scrollbar" readonly></textarea>
             <button onclick="copyExportList()" class="w-full bg-pink-500 text-white py-5 rounded-2xl font-black text-sm uppercase shadow-md">Copiar Tudo</button>
         </div>
     </div>
@@ -492,7 +559,7 @@
     <div id="iconPickerModal" class="fixed inset-0 bg-white z-[60] hidden flex flex-col p-8">
         <header class="flex justify-between items-center mb-6">
             <h3 class="text-2xl font-black brand-font">Símbolos</h3>
-            <button onclick="closeIconPicker()" class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <button onclick="closeIconPicker()" class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center flex-shrink-0"><i data-lucide="x" class="w-6 h-6"></i></button>
         </header>
         <input type="text" id="iconSearch" oninput="renderIcons()" placeholder="Procurar tema..." class="w-full bg-gray-100 rounded-2xl p-5 mb-6 outline-none text-base">
         <div id="iconGrid" class="grid grid-cols-4 gap-4 overflow-y-auto no-scrollbar pb-12"></div>
@@ -533,23 +600,30 @@
         let currentView = 'list';
         let statsPeriod = 'Este Mês';
 
-        // NOVA LISTA DE 50 ÍCONES (Versão CAA.10.05#2)
         const iconList = [
-            // Super-Heróis (10)
             "shield", "zap", "sword", "crown", "rocket", "target", "gem", "flame", "skull", "trophy",
-            // Floresta/Plantas (5)
             "tree-pine", "leaf", "flower", "flower-2", "sprout",
-            // Animais Terrestres (10)
             "dog", "cat", "rabbit", "bear", "mouse", "bug", "snail", "squirrel", "piggy-bank", "bone",
-            // Animais Aquáticos/Voadores (10)
             "fish", "bird", "butterfly", "shell", "egg", "feather", "waves", "shrimp", "cloud-lightning", "wind",
-            // Doces (5)
             "cake", "ice-cream", "candy", "lollipop", "cherry",
-            // Tecnologia (5)
             "cpu", "smartphone", "monitor", "wifi", "battery-charging",
-            // Amor (5)
             "heart", "heart-handshake", "gift", "smile", "party-popper"
         ];
+
+        // Lógica do Zoom de Acessibilidade
+        window.openFontModal = () => document.getElementById('fontModal').classList.remove('hidden');
+        window.closeFontModal = () => document.getElementById('fontModal').classList.add('hidden');
+        window.setFontSize = (size) => {
+            const html = document.documentElement;
+            html.classList.remove('zoom-large', 'zoom-xlarge');
+            if (size === 'large') html.classList.add('zoom-large');
+            if (size === 'xlarge') html.classList.add('zoom-xlarge');
+            localStorage.setItem('caa_fontsize', size);
+            window.closeFontModal();
+        };
+
+        const savedFontSize = localStorage.getItem('caa_fontsize');
+        if (savedFontSize) window.setFontSize(savedFontSize);
 
         onSnapshot(query(ordersCol, orderBy("createdAt", "desc")), (snap) => {
             allOrders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -589,7 +663,7 @@
                 if (currentFilter === 'Urgente') {
                     filtered = filtered.filter(o => {
                         const urg = getUrgency(o).type;
-                        return (urg === 'critical' || urg === 'urgent') && o.status !== 'Concluído';
+                        return (urg === 'critical' || urg === 'warning') && o.status !== 'Concluído';
                     });
                 } else { 
                     filtered = filtered.filter(o => o.status === currentFilter); 
@@ -605,9 +679,16 @@
 
             const groups = {};
             filtered.forEach(o => {
-                const deliveryDate = new Date(o.deliveryDate + "T12:00:00");
-                const monthYear = deliveryDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
-                const groupKey = deliveryDate.getFullYear() * 100 + deliveryDate.getMonth();
+                // FASE 1.2: Agrupar usando a "Data do Pedido" (orderDate)
+                let baseDateStr = o.orderDate;
+                if (!baseDateStr) {
+                    baseDateStr = o.createdAt ? o.createdAt.toDate().toISOString().split('T')[0] : o.deliveryDate;
+                }
+                
+                const orderDateObj = new Date(baseDateStr + "T12:00:00");
+                const monthYear = orderDateObj.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+                const groupKey = orderDateObj.getFullYear() * 100 + orderDateObj.getMonth();
+                
                 if (!groups[groupKey]) groups[groupKey] = { label: monthYear, orders: [] };
                 groups[groupKey].orders.push(o);
             });
@@ -642,42 +723,43 @@
             
             return `
                 <div id="card-${o.id}" class="order-card p-6 flex flex-col ${isDone ? 'concluded' : ''}" onclick="toggleCard('${o.id}')">
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-4 min-w-0">
+                    <div class="flex justify-between items-center gap-2">
+                        <div class="flex items-center gap-4 min-w-0 flex-1">
                             <div class="w-14 h-14 bg-pink-50 rounded-2xl flex-shrink-0 flex items-center justify-center text-pink-500 border border-white">
                                 <i data-lucide="${o.iconName || 'smile'}" class="w-8 h-8"></i>
                             </div>
-                            <div class="min-w-0">
-                                <div class="flex items-center gap-2">
-                                    <h4 class="font-black text-lg truncate text-pink-900">${o.clientName}</h4>
-                                    ${isDone ? '<i data-lucide="check-circle-2" class="w-4 h-4 text-blue-500"></i>' : ''}
-                                    ${hasDelivery ? `<button onclick="event.stopPropagation(); showToast('Pedido para entrega/correios 🚚')" class="text-blue-500 animate-bounce"><i data-lucide="truck" class="w-4 h-4"></i></button>` : ''}
+                            <div class="min-w-0 flex-1">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <h4 class="font-black text-lg text-pink-900 leading-tight break-words">${o.clientName}</h4>
+                                    ${isDone ? '<i data-lucide="check-circle-2" class="w-4 h-4 text-blue-500 flex-shrink-0"></i>' : ''}
+                                    ${hasDelivery ? `<button onclick="event.stopPropagation(); showToast('Pedido para entrega/correios 🚚')" class="text-blue-500 animate-bounce flex-shrink-0"><i data-lucide="truck" class="w-4 h-4"></i></button>` : ''}
                                 </div>
-                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">
+                                <p class="text-[0.625rem] font-black text-gray-400 uppercase tracking-widest mt-1">
                                     ${items.length} ${items.length === 1 ? 'Produto' : 'Produtos'} • R$ ${parseFloat(o.orderValue || 0).toFixed(2)}
                                 </p>
                             </div>
                         </div>
-                        <div class="flex flex-col items-end gap-1">
-                             <span class="px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider ${urgency.bg} ${urgency.text}">${urgency.label}</span>
+                        <div class="flex flex-col items-end gap-2 flex-shrink-0">
+                             <!-- FASE 1.3: Exibe Tempo Produzido se Concluído, senão exibe contagem -->
+                             <span class="px-3 py-1.5 rounded-xl text-[0.625rem] font-black uppercase tracking-wider text-center whitespace-nowrap ${urgency.bg} ${urgency.text}">${urgency.label}</span>
                              <i data-lucide="chevron-down" class="w-4 h-4 text-pink-200 transition-transform chevron-card"></i>
                         </div>
                     </div>
 
                     <div class="card-details">
-                        <div class="space-y-3 bg-gray-50/70 rounded-3xl p-5 border border-gray-100">
+                        <div class="space-y-3 bg-gray-50/70 rounded-3xl p-5 border border-gray-100 mt-4">
                             <div class="space-y-2">
-                                <p class="text-[9px] font-black text-pink-300 uppercase px-1">Detalhamento:</p>
+                                <p class="text-[0.5625rem] font-black text-pink-300 uppercase px-1">Detalhamento:</p>
                                 ${items.map((it, idx) => `
                                     <div class="bg-white p-3 rounded-xl shadow-sm border border-pink-50">
-                                        <div class="flex justify-between items-start">
-                                            <div>
-                                                <span class="block text-[8px] font-black text-pink-300 uppercase mb-0.5">${it.type || 'Produto'}</span>
-                                                <span class="font-bold text-sm text-pink-900">${it.text}</span>
+                                        <div class="flex justify-between items-start gap-2">
+                                            <div class="min-w-0">
+                                                <span class="block text-[0.5rem] font-black text-pink-300 uppercase mb-0.5 break-words">${it.type || 'Produto'}</span>
+                                                <span class="font-bold text-sm text-pink-900 break-words block">${it.text}</span>
                                             </div>
-                                            <span class="font-black text-xs text-pink-500">R$ ${parseFloat(it.value || 0).toFixed(2)}</span>
+                                            <span class="font-black text-xs text-pink-500 flex-shrink-0">R$ ${parseFloat(it.value || 0).toFixed(2)}</span>
                                         </div>
-                                        <div class="flex gap-4 mt-1.5 text-[10px] font-bold text-gray-400 uppercase">
+                                        <div class="flex flex-wrap gap-x-4 gap-y-1 mt-1.5 text-[0.625rem] font-bold text-gray-400 uppercase">
                                             <span>Cor: ${it.color}</span>
                                             <span>Tema: ${it.theme}</span>
                                         </div>
@@ -685,37 +767,38 @@
                                 `).join('')}
                             </div>
 
-                            ${o.observations ? `<div class="obs-box mt-2"><p class="text-[9px] font-black uppercase mb-1">Nota:</p>${o.observations}</div>` : ''}
+                            ${o.observations ? `<div class="obs-box mt-2"><p class="text-[0.5625rem] font-black uppercase mb-1">Nota:</p>${o.observations}</div>` : ''}
 
                             ${hasDelivery ? `
                             <div class="flex gap-3 pt-2 mt-2 border-t border-gray-200/50">
-                                <span class="text-[10px] font-black uppercase text-blue-400 w-16">Logística:</span>
-                                <div class="flex-1">
-                                    <p class="text-sm font-semibold text-gray-600">${o.addrStreet || ''}, ${o.addrNumber || 'S/N'}</p>
-                                    <p class="text-[11px] text-gray-400">${o.addrNeighborhood || ''} - ${o.addrCity || ''}</p>
-                                    ${o.addrCep ? `<p class="text-[10px] font-black text-blue-300 mt-0.5">CEP: ${o.addrCep}</p>` : ''}
-                                    <div class="flex gap-3 mt-3">
-                                        <button onclick="event.stopPropagation(); openMapForOrder('${o.id}')" class="flex items-center gap-1.5 text-blue-500 text-[10px] font-black uppercase bg-blue-50 px-3 py-2 rounded-lg">
-                                            <i data-lucide="map-pin" class="w-3 h-3"></i> Abrir no Mapa
+                                <span class="text-[0.625rem] font-black uppercase text-blue-400 w-16 flex-shrink-0">Logística:</span>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-semibold text-gray-600 break-words">${o.addrStreet || ''}, ${o.addrNumber || 'S/N'}</p>
+                                    <p class="text-[0.6875rem] text-gray-400 break-words">${o.addrNeighborhood || ''} - ${o.addrCity || ''}</p>
+                                    ${o.addrCep ? `<p class="text-[0.625rem] font-black text-blue-300 mt-0.5">CEP: ${o.addrCep}</p>` : ''}
+                                    <div class="flex flex-wrap gap-2 mt-3">
+                                        <button onclick="event.stopPropagation(); openMapForOrder('${o.id}')" class="flex items-center justify-center gap-1.5 text-blue-500 text-[0.625rem] font-black uppercase bg-blue-50 px-3 py-2 rounded-lg flex-1">
+                                            <i data-lucide="map-pin" class="w-3 h-3 flex-shrink-0"></i> Abrir no Mapa
                                         </button>
-                                        <button onclick="event.stopPropagation(); copyAddress('${o.id}')" class="flex items-center gap-1.5 text-slate-500 text-[10px] font-black uppercase bg-slate-100 px-3 py-2 rounded-lg">
-                                            <i data-lucide="copy" class="w-3 h-3"></i> Copiar Tudo
+                                        <button onclick="event.stopPropagation(); copyAddress('${o.id}')" class="flex items-center justify-center gap-1.5 text-slate-500 text-[0.625rem] font-black uppercase bg-slate-100 px-3 py-2 rounded-lg flex-1">
+                                            <i data-lucide="copy" class="w-3 h-3 flex-shrink-0"></i> Copiar
                                         </button>
                                     </div>
                                 </div>
                             </div>` : ''}
                             
                             <div class="flex justify-end items-center mt-2 pt-2 border-t border-gray-200/50 text-pink-300">
-                                <i data-lucide="calendar" class="w-4 h-4 mr-2"></i>
-                                <span class="text-sm font-black">${new Date(o.deliveryDate + "T12:00:00").toLocaleDateString('pt-BR')}</span>
+                                <i data-lucide="calendar" class="w-4 h-4 mr-2 flex-shrink-0"></i>
+                                <span class="text-sm font-black">Entrega: ${new Date(o.deliveryDate + "T12:00:00").toLocaleDateString('pt-BR')}</span>
                             </div>
                         </div>
 
-                        <div class="flex justify-end items-center gap-3 mt-5" onclick="event.stopPropagation()">
+                        <div class="flex justify-end items-center flex-wrap gap-3 mt-5" onclick="event.stopPropagation()">
                             <button onclick="confirmDelete('${o.id}')" class="btn-icon-sm bg-red-50 text-red-300"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
                             <button onclick="editOrder('${o.id}')" class="btn-icon-sm bg-blue-50 text-blue-300"><i data-lucide="pencil" class="w-5 h-5"></i></button>
                             <button onclick="showReceipt('${o.id}')" class="btn-icon-sm bg-pink-50 text-pink-300"><i data-lucide="file-text" class="w-5 h-5"></i></button>
-                            <button onclick="toggleStatus('${o.id}', '${o.status}')" class="btn-concluir ${isDone ? 'bg-gray-200 text-gray-500' : 'bg-pink-500 text-white shadow-md'} active:scale-95">
+                            <!-- FASE 1.3: Modificado onClick para abrir modal -->
+                            <button onclick="toggleStatus('${o.id}', '${o.status}')" class="btn-concluir flex-1 sm:flex-none ${isDone ? 'bg-gray-200 text-gray-500' : 'bg-pink-500 text-white shadow-md'} active:scale-95">
                                 ${isDone ? 'Reabrir' : 'Concluir'}
                             </button>
                         </div>
@@ -733,30 +816,30 @@
             itemDiv.innerHTML = `
                 <div class="item-number">PRODUTO ${count}</div>
                 <button type="button" onclick="this.parentElement.remove(); updateOrderTotal();" class="btn-remove-item">
-                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    <i data-lucide="trash-2" class="w-5 h-5"></i>
                 </button>
                 <div class="space-y-3 mt-4">
                     <div>
-                        <label class="text-[9px] font-black text-pink-300 uppercase ml-1">Tipo de Produto (Opcional):</label>
-                        <input type="text" list="productTypes" placeholder="Ex: Toalhinha" class="item-type w-full bg-white rounded-xl p-3 text-sm outline-none border border-pink-50 mb-2" value="${data?.type || ''}">
+                        <label class="text-[0.5625rem] font-black text-pink-300 uppercase ml-1 block mb-1">Tipo de Produto (Opcional):</label>
+                        <input type="text" list="productTypes" placeholder="Ex: Toalhinha" class="item-type w-full bg-white rounded-xl p-3 text-sm outline-none border border-pink-50 mb-3" value="${data?.type || ''}">
                         
-                        <label class="text-[9px] font-black text-pink-300 uppercase ml-1">Texto para Bordar:</label>
+                        <label class="text-[0.5625rem] font-black text-pink-300 uppercase ml-1 block mb-1">Texto para Bordar:</label>
                         <input type="text" placeholder="O que vai escrito?" required class="item-text w-full bg-white rounded-xl p-3 text-sm outline-none border border-pink-50 font-bold" value="${data?.text || ''}">
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="text-[9px] font-black text-pink-300 uppercase ml-1">Cor:</label>
+                            <label class="text-[0.5625rem] font-black text-pink-300 uppercase ml-1 block mb-1">Cor:</label>
                             <input type="text" placeholder="Cor" class="item-color w-full bg-white rounded-xl p-3 text-sm outline-none border border-pink-50" value="${data?.color || ''}">
                         </div>
                         <div>
-                            <label class="text-[9px] font-black text-pink-300 uppercase ml-1">Tema:</label>
+                            <label class="text-[0.5625rem] font-black text-pink-300 uppercase ml-1 block mb-1">Tema:</label>
                             <input type="text" placeholder="Tema" class="item-theme w-full bg-white rounded-xl p-3 text-sm outline-none border border-pink-50" value="${data?.theme || ''}">
                         </div>
                     </div>
                     <div class="relative">
-                        <label class="text-[9px] font-black text-pink-300 uppercase ml-1">Valor Unitário:</label>
-                        <div class="relative mt-1">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[10px] font-black text-pink-300">R$</span>
+                        <label class="text-[0.5625rem] font-black text-pink-300 uppercase ml-1 block mb-1">Valor Unitário:</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[0.625rem] font-black text-pink-300">R$</span>
                             <input type="number" step="0.01" placeholder="0.00" oninput="updateOrderTotal()" class="item-value w-full bg-white rounded-xl p-3 pl-8 text-sm outline-none border border-pink-50 font-black text-pink-600" value="${data?.value || ''}">
                         </div>
                     </div>
@@ -797,6 +880,7 @@
             const payload = { 
                 clientName: document.getElementById('clientName').value, 
                 clientWhatsApp: document.getElementById('clientWhatsApp').value,
+                orderDate: document.getElementById('orderDate').value,
                 deliveryDate: document.getElementById('deliveryDate').value, 
                 orderValue: parseFloat(document.getElementById('orderValue').value), 
                 items: items,
@@ -826,6 +910,14 @@
             document.getElementById('editId').value = o.id; 
             document.getElementById('clientName').value = o.clientName || ''; 
             document.getElementById('clientWhatsApp').value = o.clientWhatsApp || '';
+            
+            let oDate = o.orderDate;
+            if (!oDate) {
+                if (o.createdAt) { oDate = o.createdAt.toDate().toISOString().split('T')[0]; } 
+                else { oDate = o.deliveryDate; }
+            }
+            document.getElementById('orderDate').value = oDate || ''; 
+            
             document.getElementById('deliveryDate').value = o.deliveryDate || ''; 
             document.getElementById('iconName').value = o.iconName || 'smile';
             document.getElementById('observations').value = o.observations || '';
@@ -862,12 +954,12 @@
             document.getElementById('recNow').innerText = new Date().toLocaleString('pt-BR');
             const list = document.getElementById('recItemsList');
             list.innerHTML = items.map(it => `
-                <div class="grid grid-cols-12 gap-2 text-[10px] items-center">
+                <div class="grid grid-cols-12 gap-2 text-[0.625rem] items-center">
                     <div class="col-span-6">
                         <p class="font-bold text-pink-900">${it.text}</p>
-                        <p class="text-[7px] text-gray-400 uppercase tracking-tighter">${it.type || 'Prod'} • ${it.theme}</p>
+                        <p class="text-[0.4375rem] text-gray-400 uppercase tracking-tighter">${it.type || 'Prod'} • ${it.theme}</p>
                     </div>
-                    <div class="col-span-3 text-center text-[8px] text-gray-500 font-bold uppercase">${it.color}</div>
+                    <div class="col-span-3 text-center text-[0.5rem] text-gray-500 font-bold uppercase">${it.color}</div>
                     <div class="col-span-3 text-right font-black text-pink-600">R$ ${it.value.toFixed(2)}</div>
                 </div>
             `).join('');
@@ -966,11 +1058,29 @@
             const revenue = done.reduce((acc, o) => acc + (parseFloat(o.orderValue) || 0), 0);
             const pendingRev = filteredStats.filter(o => o.status !== 'Concluído').reduce((acc, o) => acc + (parseFloat(o.orderValue) || 0), 0);
             
+            // FASE 1.3: Cálculo do Tempo Médio de Produção
+            let totalProdDays = 0;
+            let validProdCount = 0;
+            done.forEach(o => {
+                let baseDateStr = o.orderDate;
+                if (!baseDateStr) baseDateStr = o.createdAt ? o.createdAt.toDate().toISOString().split('T')[0] : o.deliveryDate;
+                let compDateStr = o.completionDate || o.deliveryDate; // Fallback se já era concluído antes da fase 1.3
+                
+                if (baseDateStr && compDateStr) {
+                    const start = new Date(baseDateStr + "T12:00:00");
+                    const end = new Date(compDateStr + "T12:00:00");
+                    const days = Math.max(0, Math.ceil((end - start) / (1000 * 60 * 60 * 24)));
+                    totalProdDays += days;
+                    validProdCount++;
+                }
+            });
+            const avgDays = validProdCount > 0 ? Math.round(totalProdDays / validProdCount) : 0;
+            
             container.innerHTML = `
                 <div class="space-y-6 animate-in slide-in-from-bottom duration-500">
-                    <div class="flex justify-between items-center px-1">
-                        <h2 class="text-xl font-black text-pink-900 flex items-center gap-2"><i data-lucide="trending-up" class="w-5 h-5 text-pink-500"></i> Performance</h2>
-                        <select onchange="updateStatsPeriod(this.value)" class="text-[10px] font-bold uppercase bg-white border border-pink-100 rounded-xl px-3 py-2 outline-none text-pink-400">
+                    <div class="flex justify-between items-center px-1 flex-wrap gap-2">
+                        <h2 class="text-xl font-black text-pink-900 flex items-center gap-2"><i data-lucide="trending-up" class="w-5 h-5 text-pink-500 flex-shrink-0"></i> Performance</h2>
+                        <select onchange="updateStatsPeriod(this.value)" class="text-[0.625rem] font-bold uppercase bg-white border border-pink-100 rounded-xl px-3 py-2 outline-none text-pink-400">
                             <option ${statsPeriod === 'Este Mês' ? 'selected' : ''}>Este Mês</option>
                             <option ${statsPeriod === 'Mês Passado' ? 'selected' : ''}>Mês Passado</option>
                             <option ${statsPeriod === 'Total' ? 'selected' : ''}>Total Geral</option>
@@ -978,11 +1088,11 @@
                     </div>
 
                     <div class="stats-card bg-white p-6 rounded-3xl border border-pink-50">
-                        <span class="text-[10px] font-black uppercase text-gray-400 mb-6 block">Evolução de Vendas (4 meses)</span>
+                        <span class="text-[0.625rem] font-black uppercase text-gray-400 mb-6 block">Evolução de Vendas (4 meses)</span>
                         <div class="flex justify-around items-end h-32 px-2">
                             ${months.map(m => `
                                 <div class="flex flex-col items-center group">
-                                    <div class="text-[8px] font-black text-pink-300 opacity-0 group-hover:opacity-100 mb-1">R$ ${m.total.toFixed(0)}</div>
+                                    <div class="text-[0.5rem] font-black text-pink-300 opacity-0 group-hover:opacity-100 mb-1">R$ ${m.total.toFixed(0)}</div>
                                     <div class="chart-bar" style="height: ${(m.total / maxVal) * 80 + 5}px"></div>
                                     <div class="chart-label">${m.label}</div>
                                 </div>
@@ -992,21 +1102,31 @@
 
                     <div class="grid grid-cols-2 gap-4">
                         <div class="stats-card bg-white p-6 rounded-3xl border border-pink-50">
-                            <span class="text-[10px] font-black uppercase text-gray-400">Total Vendas</span>
+                            <span class="text-[0.625rem] font-black uppercase text-gray-400">Total Vendas</span>
                             <div class="text-3xl font-black text-pink-600">${filteredStats.length}</div>
                         </div>
                         <div class="stats-card bg-white p-6 rounded-3xl border border-pink-50">
-                            <span class="text-[10px] font-black uppercase text-gray-400">Concluídos</span>
+                            <span class="text-[0.625rem] font-black uppercase text-gray-400">Concluídos</span>
                             <div class="text-3xl font-black text-green-500">${done.length}</div>
                         </div>
                     </div>
 
+                    <!-- FASE 1.3: Novo Card de Tempo Médio -->
+                    <div class="stats-card bg-white p-7 rounded-3xl border border-blue-50 border-l-8 border-l-blue-500 shadow-sm relative overflow-hidden">
+                        <i data-lucide="clock" class="absolute -right-4 -top-4 w-24 h-24 text-blue-50 opacity-50"></i>
+                        <span class="text-[0.625rem] font-black uppercase text-gray-400 relative z-10">Tempo Médio de Produção</span>
+                        <div class="text-4xl font-black text-blue-900 mt-1 relative z-10">${avgDays} <span class="text-base font-bold text-gray-400">dias</span></div>
+                        <p class="text-[0.625rem] font-bold text-gray-400 mt-3 border-t border-gray-50 pt-3 relative z-10">
+                            Em média, você leva <b class="text-blue-500">${avgDays} dias</b> para entregar um pedido.
+                        </p>
+                    </div>
+
                     <div class="stats-card bg-white p-7 rounded-3xl border border-pink-50 border-l-8 border-l-pink-500 shadow-sm">
-                        <span class="text-[10px] font-black uppercase text-gray-400">Receita Realizada</span>
-                        <div class="text-4xl font-black text-pink-900">R$ ${revenue.toFixed(2)}</div>
-                        <div class="mt-6 pt-4 border-t border-gray-50 flex justify-between">
-                            <span class="text-[10px] font-bold text-gray-300 uppercase">A RECEBER:</span>
-                            <span class="text-[10px] font-black text-gray-500">R$ ${pendingRev.toFixed(2)}</span>
+                        <span class="text-[0.625rem] font-black uppercase text-gray-400">Receita Realizada</span>
+                        <div class="text-4xl font-black text-pink-900 break-all">R$ ${revenue.toFixed(2)}</div>
+                        <div class="mt-6 pt-4 border-t border-gray-50 flex justify-between gap-2">
+                            <span class="text-[0.625rem] font-bold text-gray-300 uppercase">A RECEBER:</span>
+                            <span class="text-[0.625rem] font-black text-gray-500">R$ ${pendingRev.toFixed(2)}</span>
                         </div>
                     </div>
                 </div>`;
@@ -1024,7 +1144,12 @@
                 list += `PEDIDO #${i+1}\n`;
                 list += `👤 CLIENTE: ${o.clientName}\n`;
                 list += `📱 WHATSAPP: ${o.clientWhatsApp || '-'}\n`;
-                list += `📅 ENTREGA: ${new Date(o.deliveryDate + "T12:00:00").toLocaleDateString('pt-BR')}\n`;
+                
+                let baseDateStr = o.orderDate;
+                if (!baseDateStr) baseDateStr = o.createdAt ? o.createdAt.toDate().toISOString().split('T')[0] : o.deliveryDate;
+                list += `📅 DATA DO PEDIDO: ${new Date(baseDateStr + "T12:00:00").toLocaleDateString('pt-BR')}\n`;
+                list += `📅 PRAZO ENTREGA: ${new Date(o.deliveryDate + "T12:00:00").toLocaleDateString('pt-BR')}\n`;
+                
                 list += `📦 PRODUTOS:\n`;
                 items.forEach(it => {
                     list += `   - ${it.type || 'Prod'}: ${it.text}\n`;
@@ -1046,16 +1171,31 @@
         };
 
         window.getUrgency = (o) => {
-            if (o.status === 'Concluído') return { type: 'done', label: 'Concluído', bg: 'bg-blue-500', text: 'text-white' };
+            if (o.status === 'Concluído') {
+                // FASE 1.3: Cálculo e Exibição de "Produzido em X dias"
+                let baseDateStr = o.orderDate;
+                if (!baseDateStr) baseDateStr = o.createdAt ? o.createdAt.toDate().toISOString().split('T')[0] : o.deliveryDate;
+                
+                let compDateStr = o.completionDate || new Date().toISOString().split('T')[0]; // Usa data salva ou data atual para concluídos antigos
+                
+                const start = new Date(baseDateStr + "T12:00:00");
+                const end = new Date(compDateStr + "T12:00:00");
+                const diffDays = Math.max(0, Math.ceil((end - start) / (1000 * 60 * 60 * 24))); // Math.max evita dias negativos se a pessoa por engano botar conclusão antes da data do pedido
+
+                return { type: 'done', label: `Produzido em ${diffDays} dia${diffDays===1?'':'s'}`, bg: 'bg-blue-500', text: 'text-white' };
+            }
+
             const now = new Date(); now.setHours(0,0,0,0);
             const delivery = new Date(o.deliveryDate + "T12:00:00");
             const diffDays = Math.ceil((delivery - now) / (1000 * 60 * 60 * 24));
-            if (diffDays < 0) return { type: 'past', label: 'Atrasado', bg: 'bg-black', text: 'text-white' };
-            if (diffDays <= 2) return { type: 'critical', label: diffDays === 0 ? 'HOJE' : diffDays + ' Dias', bg: 'bg-red-600', text: 'text-white' };
-            const created = o.createdAt ? o.createdAt.toDate() : new Date();
-            const ratio = (delivery - now) / (delivery - created);
-            if (ratio < 0.5) return { type: 'warning', label: 'Prazo Próximo', bg: 'bg-orange-500', text: 'text-white' };
-            return { type: 'safe', label: 'No Prazo', bg: 'bg-green-500', text: 'text-white' };
+            
+            if (diffDays < 0) {
+                const d = Math.abs(diffDays);
+                return { type: 'past', label: `Atrasado ${d} dia${d>1?'s':''}`, bg: 'bg-black', text: 'text-white' };
+            }
+            if (diffDays === 0) return { type: 'critical', label: 'Entrega Hoje!', bg: 'bg-red-600 animate-pulse', text: 'text-white' };
+            if (diffDays <= 3) return { type: 'warning', label: `Falta${diffDays===1?'':'m'} ${diffDays} dia${diffDays===1?'':'s'}`, bg: 'bg-orange-500', text: 'text-white' };
+            return { type: 'safe', label: `Falta${diffDays===1?'':'m'} ${diffDays} dia${diffDays===1?'':'s'}`, bg: 'bg-green-500', text: 'text-white' };
         };
 
         window.toggleCard = (id) => {
@@ -1078,6 +1218,44 @@
             setTimeout(() => t.classList.remove('show'), 3000);
         };
 
+        // FASE 1.3: Novo Fluxo de Conclusão com Modal
+        window.closeFinishModal = () => document.getElementById('finishModal').classList.add('hidden');
+        
+        window.confirmFinish = async (type) => {
+            const id = document.getElementById('finishOrderId').value;
+            let dateStr;
+            
+            if (type === 'now') {
+                dateStr = new Date().toISOString().split('T')[0];
+            } else {
+                dateStr = document.getElementById('finishDateInput').value;
+                if (!dateStr) return showToast("Selecione uma data válida!");
+            }
+
+            try {
+                // Atualiza o status e salva a data em que foi efetivamente concluído
+                await updateDoc(doc(db, "orders", id), { status: 'Concluído', completionDate: dateStr });
+                closeFinishModal();
+                showToast("Pedido Concluído! 🎉");
+            } catch (err) { 
+                console.error(err); 
+                showToast("Erro ao concluir."); 
+            }
+        };
+
+        window.toggleStatus = async (id, s) => { 
+            if (s === 'Concluído') {
+                // Se já estava concluído (Reabrir), tira do status e limpa a data de conclusão
+                await updateDoc(doc(db, "orders", id), { status: 'Pendente', completionDate: null }); 
+                showToast("Pedido reaberto!");
+            } else {
+                // Se vai concluir agora, abre o modal de seleção de data
+                document.getElementById('finishOrderId').value = id;
+                document.getElementById('finishDateInput').value = new Date().toISOString().split('T')[0]; // Preenche com hoje por padrão
+                document.getElementById('finishModal').classList.remove('hidden');
+            }
+        };
+
         window.closeOrderModal = () => document.getElementById('orderModal').classList.add('hidden');
         window.openFormModal = () => { 
             document.getElementById('orderForm').reset(); 
@@ -1086,6 +1264,10 @@
             document.getElementById('editId').value = ""; 
             document.getElementById('displayTotal').innerText = "0,00";
             document.getElementById('modalTitle').innerText = "Novo Registro"; 
+            
+            const todayStr = new Date().toISOString().split('T')[0];
+            document.getElementById('orderDate').value = todayStr;
+
             document.getElementById('orderModal').classList.remove('hidden'); 
         };
 
@@ -1093,13 +1275,12 @@
             currentView = v; currentFilter = f;
             document.querySelectorAll('.nav-chip').forEach(btn => {
                 const active = btn.innerText.includes(f) || (v === 'stats' && btn.innerText.includes('Estatísticas'));
-                btn.className = `nav-chip px-6 py-3 rounded-2xl text-[11px] font-extrabold transition-all ${active ? 'bg-pink-500 text-white shadow-md' : 'bg-white border border-pink-50 text-pink-300'}`;
+                btn.className = `nav-chip px-6 py-3 rounded-2xl text-[0.6875rem] font-extrabold transition-all ${active ? 'bg-pink-500 text-white shadow-md' : 'bg-white border border-pink-50 text-pink-300'}`;
             });
             render();
         };
 
         window.closeReceipt = () => document.getElementById('receiptModal').classList.add('hidden');
-        window.toggleStatus = async (id, s) => { await updateDoc(doc(db, "orders", id), { status: s === 'Concluído' ? 'Pendente' : 'Concluído' }); };
         window.confirmDelete = (id) => { window.delId = id; document.getElementById('confirmModal').classList.remove('hidden'); };
         window.closeConfirmModal = () => document.getElementById('confirmModal').classList.add('hidden');
         document.getElementById('confirmBtn').onclick = async () => { await deleteDoc(doc(db, "orders", window.delId)); closeConfirmModal(); };
@@ -1121,5 +1302,3 @@
     </script>
 </body>
 </html>
-
-```
