@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Cindy Artes Agenda - CAA.23.05#1.3</title>
+    <title>Cindy Artes Agenda - CAA.31.08#1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Bibliotecas para Gerar PDF/Imagem do Recibo -->
@@ -20,7 +20,7 @@
             --text-main: #3D0A1B;
         }
 
-        /* Sistema de Zoom Responsivo (Fase 1.1) */
+        /* Sistema de Zoom Responsivo e Acessibilidade */
         html { transition: font-size 0.3s ease; font-size: 16px; }
         html.zoom-large { font-size: 18.5px; }
         html.zoom-xlarge { font-size: 21px; }
@@ -60,7 +60,7 @@
         .order-card {
             background: white;
             border-radius: 24px;
-            border: 1px solid rgba(240, 98, 146, 0.1);
+            border: 1px solid rgba(240, 98, 146, 0.12);
             box-shadow: 0 4px 12px rgba(240, 98, 146, 0.05);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
@@ -72,7 +72,7 @@
         }
 
         .order-card.concluded {
-            opacity: 0.8;
+            opacity: 0.85;
             background: #F8FAFC;
             border-style: solid;
             border-color: #E2E8F0;
@@ -129,7 +129,7 @@
         }
 
         .expanded .card-details {
-            max-height: 2500px;
+            max-height: 3000px;
             opacity: 1;
             padding-top: 1rem;
         }
@@ -247,6 +247,11 @@
             color: #D81B60;
             margin-top: 8px;
         }
+
+        /* Animação do Chevron */
+        .expanded .chevron-card {
+            transform: rotate(180deg);
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -267,7 +272,7 @@
             <div class="flex justify-between items-center mb-6">
                 <div>
                     <h1 class="text-2xl font-bold brand-font">Cindy Artes Agenda</h1>
-                    <span class="text-[0.625rem] font-bold opacity-30 tracking-widest uppercase">Versão CAA.23.05#1.3</span>
+                    <span class="text-[0.625rem] font-bold opacity-30 tracking-widest uppercase">Versão CAA.31.08#1</span>
                 </div>
                 <div class="bg-white/90 backdrop-blur px-4 py-2 rounded-2xl flex items-center gap-2 shadow-sm">
                     <span id="orderCount" class="text-lg font-black text-pink-600 leading-none">0</span>
@@ -313,7 +318,7 @@
         </button>
     </div>
 
-    <!-- MODAL FONTES (Fase 1.1) -->
+    <!-- MODAL FONTES -->
     <div id="fontModal" class="fixed inset-0 bg-black/80 z-[100] hidden flex items-center justify-center p-6 backdrop-blur-sm">
         <div class="bg-white w-full max-w-xs rounded-[40px] p-8 shadow-2xl text-center">
             <div class="w-16 h-16 bg-pink-50 text-pink-500 rounded-3xl flex items-center justify-center mx-auto mb-6">
@@ -329,7 +334,7 @@
         </div>
     </div>
 
-    <!-- FASE 1.3: MODAL DE CONCLUSÃO DE PEDIDO -->
+    <!-- MODAL DE CONCLUSÃO DE PEDIDO -->
     <div id="finishModal" class="fixed inset-0 bg-black/70 z-[80] hidden flex items-center justify-center p-6 backdrop-blur-sm">
         <div class="bg-white w-full max-w-sm rounded-[40px] p-8 text-center shadow-2xl relative">
             <button onclick="closeFinishModal()" class="absolute top-6 right-6 w-10 h-10 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-400 active:scale-90 transition-transform"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -386,7 +391,7 @@
                         </div>
                     </div>
 
-                    <!-- FASE 1.2: Nova Divisão de Datas -->
+                    <!-- Divisão de Datas -->
                     <div class="grid grid-cols-2 gap-4">
                         <div class="col-span-1">
                             <label class="text-[0.6875rem] font-extrabold text-pink-400 uppercase ml-2 mb-2 block">Data do Pedido:</label>
@@ -679,7 +684,6 @@
 
             const groups = {};
             filtered.forEach(o => {
-                // FASE 1.2: Agrupar usando a "Data do Pedido" (orderDate)
                 let baseDateStr = o.orderDate;
                 if (!baseDateStr) {
                     baseDateStr = o.createdAt ? o.createdAt.toDate().toISOString().split('T')[0] : o.deliveryDate;
@@ -722,32 +726,39 @@
             const items = getItemsArray(o);
             
             return `
-                <div id="card-${o.id}" class="order-card p-6 flex flex-col ${isDone ? 'concluded' : ''}" onclick="toggleCard('${o.id}')">
-                    <div class="flex justify-between items-center gap-2">
-                        <div class="flex items-center gap-4 min-w-0 flex-1">
-                            <div class="w-14 h-14 bg-pink-50 rounded-2xl flex-shrink-0 flex items-center justify-center text-pink-500 border border-white">
-                                <i data-lucide="${o.iconName || 'smile'}" class="w-8 h-8"></i>
+                <div id="card-${o.id}" class="order-card p-5 sm:p-6 flex flex-col ${isDone ? 'concluded' : ''}" onclick="toggleCard('${o.id}')">
+                    <!-- Linha Superior: Ícone, Informações do Cliente e Chevron -->
+                    <div class="flex justify-between items-start gap-3">
+                        <div class="flex items-start gap-3 sm:gap-4 min-w-0 flex-1">
+                            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-pink-50 rounded-2xl flex-shrink-0 flex items-center justify-center text-pink-500 border border-white mt-0.5">
+                                <i data-lucide="${o.iconName || 'smile'}" class="w-7 h-7 sm:w-8 sm:h-8"></i>
                             </div>
                             <div class="min-w-0 flex-1">
                                 <div class="flex items-center gap-2 flex-wrap">
-                                    <h4 class="font-black text-lg text-pink-900 leading-tight break-words">${o.clientName}</h4>
+                                    <h4 class="font-black text-lg sm:text-xl text-pink-900 leading-tight break-words">${o.clientName}</h4>
                                     ${isDone ? '<i data-lucide="check-circle-2" class="w-4 h-4 text-blue-500 flex-shrink-0"></i>' : ''}
                                     ${hasDelivery ? `<button onclick="event.stopPropagation(); showToast('Pedido para entrega/correios 🚚')" class="text-blue-500 animate-bounce flex-shrink-0"><i data-lucide="truck" class="w-4 h-4"></i></button>` : ''}
                                 </div>
-                                <p class="text-[0.625rem] font-black text-gray-400 uppercase tracking-widest mt-1">
+                                <p class="text-[0.6875rem] font-black text-gray-400 uppercase tracking-wider mt-1 break-words">
                                     ${items.length} ${items.length === 1 ? 'Produto' : 'Produtos'} • R$ ${parseFloat(o.orderValue || 0).toFixed(2)}
                                 </p>
                             </div>
                         </div>
-                        <div class="flex flex-col items-end gap-2 flex-shrink-0">
-                             <!-- FASE 1.3: Exibe Tempo Produzido se Concluído, senão exibe contagem -->
-                             <span class="px-3 py-1.5 rounded-xl text-[0.625rem] font-black uppercase tracking-wider text-center whitespace-nowrap ${urgency.bg} ${urgency.text}">${urgency.label}</span>
-                             <i data-lucide="chevron-down" class="w-4 h-4 text-pink-200 transition-transform chevron-card"></i>
+                        <div class="flex items-center flex-shrink-0 p-1 text-pink-300">
+                             <i data-lucide="chevron-down" class="w-5 h-5 transition-transform chevron-card"></i>
                         </div>
                     </div>
 
+                    <!-- Linha Inferior do Resumo: Tag de Prazo/Status reposicionada em baixo para total acessibilidade -->
+                    <div class="mt-3.5 pt-2.5 border-t border-pink-50/70 flex items-center justify-start flex-wrap gap-2">
+                        <span class="inline-flex items-center px-3.5 py-1.5 rounded-xl text-[0.625rem] sm:text-[0.6875rem] font-black uppercase tracking-wider text-center max-w-full break-words shadow-sm ${urgency.bg} ${urgency.text}">
+                            ${urgency.label}
+                        </span>
+                    </div>
+
+                    <!-- Detalhes Expandidos do Pedido -->
                     <div class="card-details">
-                        <div class="space-y-3 bg-gray-50/70 rounded-3xl p-5 border border-gray-100 mt-4">
+                        <div class="space-y-3 bg-gray-50/70 rounded-3xl p-5 border border-gray-100 mt-3">
                             <div class="space-y-2">
                                 <p class="text-[0.5625rem] font-black text-pink-300 uppercase px-1">Detalhamento:</p>
                                 ${items.map((it, idx) => `
@@ -797,7 +808,6 @@
                             <button onclick="confirmDelete('${o.id}')" class="btn-icon-sm bg-red-50 text-red-300"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
                             <button onclick="editOrder('${o.id}')" class="btn-icon-sm bg-blue-50 text-blue-300"><i data-lucide="pencil" class="w-5 h-5"></i></button>
                             <button onclick="showReceipt('${o.id}')" class="btn-icon-sm bg-pink-50 text-pink-300"><i data-lucide="file-text" class="w-5 h-5"></i></button>
-                            <!-- FASE 1.3: Modificado onClick para abrir modal -->
                             <button onclick="toggleStatus('${o.id}', '${o.status}')" class="btn-concluir flex-1 sm:flex-none ${isDone ? 'bg-gray-200 text-gray-500' : 'bg-pink-500 text-white shadow-md'} active:scale-95">
                                 ${isDone ? 'Reabrir' : 'Concluir'}
                             </button>
@@ -1058,13 +1068,12 @@
             const revenue = done.reduce((acc, o) => acc + (parseFloat(o.orderValue) || 0), 0);
             const pendingRev = filteredStats.filter(o => o.status !== 'Concluído').reduce((acc, o) => acc + (parseFloat(o.orderValue) || 0), 0);
             
-            // FASE 1.3: Cálculo do Tempo Médio de Produção
             let totalProdDays = 0;
             let validProdCount = 0;
             done.forEach(o => {
                 let baseDateStr = o.orderDate;
                 if (!baseDateStr) baseDateStr = o.createdAt ? o.createdAt.toDate().toISOString().split('T')[0] : o.deliveryDate;
-                let compDateStr = o.completionDate || o.deliveryDate; // Fallback se já era concluído antes da fase 1.3
+                let compDateStr = o.completionDate || o.deliveryDate;
                 
                 if (baseDateStr && compDateStr) {
                     const start = new Date(baseDateStr + "T12:00:00");
@@ -1111,7 +1120,6 @@
                         </div>
                     </div>
 
-                    <!-- FASE 1.3: Novo Card de Tempo Médio -->
                     <div class="stats-card bg-white p-7 rounded-3xl border border-blue-50 border-l-8 border-l-blue-500 shadow-sm relative overflow-hidden">
                         <i data-lucide="clock" class="absolute -right-4 -top-4 w-24 h-24 text-blue-50 opacity-50"></i>
                         <span class="text-[0.625rem] font-black uppercase text-gray-400 relative z-10">Tempo Médio de Produção</span>
@@ -1172,15 +1180,14 @@
 
         window.getUrgency = (o) => {
             if (o.status === 'Concluído') {
-                // FASE 1.3: Cálculo e Exibição de "Produzido em X dias"
                 let baseDateStr = o.orderDate;
                 if (!baseDateStr) baseDateStr = o.createdAt ? o.createdAt.toDate().toISOString().split('T')[0] : o.deliveryDate;
                 
-                let compDateStr = o.completionDate || new Date().toISOString().split('T')[0]; // Usa data salva ou data atual para concluídos antigos
+                let compDateStr = o.completionDate || new Date().toISOString().split('T')[0];
                 
                 const start = new Date(baseDateStr + "T12:00:00");
                 const end = new Date(compDateStr + "T12:00:00");
-                const diffDays = Math.max(0, Math.ceil((end - start) / (1000 * 60 * 60 * 24))); // Math.max evita dias negativos se a pessoa por engano botar conclusão antes da data do pedido
+                const diffDays = Math.max(0, Math.ceil((end - start) / (1000 * 60 * 60 * 24)));
 
                 return { type: 'done', label: `Produzido em ${diffDays} dia${diffDays===1?'':'s'}`, bg: 'bg-blue-500', text: 'text-white' };
             }
@@ -1218,7 +1225,6 @@
             setTimeout(() => t.classList.remove('show'), 3000);
         };
 
-        // FASE 1.3: Novo Fluxo de Conclusão com Modal
         window.closeFinishModal = () => document.getElementById('finishModal').classList.add('hidden');
         
         window.confirmFinish = async (type) => {
@@ -1233,7 +1239,6 @@
             }
 
             try {
-                // Atualiza o status e salva a data em que foi efetivamente concluído
                 await updateDoc(doc(db, "orders", id), { status: 'Concluído', completionDate: dateStr });
                 closeFinishModal();
                 showToast("Pedido Concluído! 🎉");
@@ -1245,13 +1250,11 @@
 
         window.toggleStatus = async (id, s) => { 
             if (s === 'Concluído') {
-                // Se já estava concluído (Reabrir), tira do status e limpa a data de conclusão
                 await updateDoc(doc(db, "orders", id), { status: 'Pendente', completionDate: null }); 
                 showToast("Pedido reaberto!");
             } else {
-                // Se vai concluir agora, abre o modal de seleção de data
                 document.getElementById('finishOrderId').value = id;
-                document.getElementById('finishDateInput').value = new Date().toISOString().split('T')[0]; // Preenche com hoje por padrão
+                document.getElementById('finishDateInput').value = new Date().toISOString().split('T')[0];
                 document.getElementById('finishModal').classList.remove('hidden');
             }
         };
